@@ -59,9 +59,9 @@ public abstract class FileTransformer implements IFileVisitor {
        * writer has been decorated by the concrete subclass!). You need to write a loop to read the
        * characters and write them to the writer.
        */
-      int copy;
-      while ((copy = reader.read()) != -1) {
-        writer.write(copy);
+      int readByte;
+      while ((readByte = reader.read()) != -1) {
+        writer.write(readByte);
       }
 
 

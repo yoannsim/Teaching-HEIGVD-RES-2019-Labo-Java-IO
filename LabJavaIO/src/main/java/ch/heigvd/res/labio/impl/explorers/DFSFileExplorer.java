@@ -3,7 +3,7 @@ package ch.heigvd.res.labio.impl.explorers;
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import java.io.File;
-
+import java.util.Arrays;
 
 
 /**
@@ -23,6 +23,7 @@ public class DFSFileExplorer implements IFileExplorer {
     if (rootDirectory.isDirectory()) {
       File[] list = rootDirectory.listFiles();
       if (list != null) {
+        Arrays.sort(list);
         for (int i = 0; i < list.length; i++) {
           // Appel récursif sur les sous-répertoires
           explore(list[i], vistor);

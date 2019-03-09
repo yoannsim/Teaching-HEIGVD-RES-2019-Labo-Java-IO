@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.FileOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
@@ -139,9 +140,16 @@ public class Application implements IApplication {
 
         new File(path).mkdirs();
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(path + "/" + filename)));
-        writer.write(quote.getQuote());
-        writer.close();
+
+
+    try {
+      BufferedWriter  writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path + "/" + filename), "utf-8"));
+      writer.write(quote.getQuote());
+      writer.close();
+    } catch (IOException ex) {
+      // Report
+      LOG.info(ex.getMessage());
+    }
 
 
 

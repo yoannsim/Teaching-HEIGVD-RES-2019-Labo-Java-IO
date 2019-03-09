@@ -1,5 +1,8 @@
 package ch.heigvd.res.labio.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.logging.Logger;
 
 /**
@@ -20,7 +23,30 @@ public class Utils {
    * contain any line separator, then the first element is an empty string.
    */
   public static String[] getNextLine(String lines) {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
 
+    if (lines == null || lines.isEmpty()) return new String[]{"", ""};
+
+    BufferedReader reader = new BufferedReader(new StringReader(lines));
+    String line = "";
+
+    try{
+      line = reader.readLine();
+    }
+    catch (IOException e) {
+      LOG.info( e.getMessage());
+    }
+    if (lines.length() <= line.length()) {
+      return new String[]{"", lines};
+    } else {
+
+      line += lines.charAt(line.length());
+
+      //pour windows
+      if(line.endsWith("\r") && lines.length() > line.length() && lines.charAt(line.length()) == '\n')
+        line += lines.charAt(line.length());
+      return new String[]{line, lines.substring(line.length())};
+    }
+
+  }
 }
+

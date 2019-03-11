@@ -36,7 +36,7 @@ public class Utils {
       LOG.info( e.getMessage());
     }
     if (lines.length() <= line.length()) {
-      return new String[]{"", lines};
+      return new String[]{"", line};
     } else {
 
       line += lines.charAt(line.length());

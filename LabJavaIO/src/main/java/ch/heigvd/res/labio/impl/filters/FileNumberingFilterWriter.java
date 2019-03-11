@@ -4,7 +4,7 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.logging.Logger;
-import ch.heigvd.res.labio.impl.Utils;
+
 
 /**
  * This class transforms the streams of character sent to the decorated writer.
@@ -20,64 +20,66 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
   private int numLigne = 0;
-  private Boolean windiwsFlag = false;
+  private Boolean windowsFlag = false;
 
   public FileNumberingFilterWriter(Writer out) {
     super(out);
+    try {
+      super.write(deco());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
   }
 
   @Override
   public void write(String str, int off, int len) throws IOException {
 
-    String out ="";
-    String[] tab;
-
-     str = str.substring(off,len+off);
-
-    if(numLigne == 0)
-      out = ++numLigne + "\t";
-
-    do{
-        tab = Utils.getNextLine(str);
-        str = tab[1];
-        out += tab[0];
-        if(tab[1].isEmpty() ||(!tab[1].isEmpty() &&  !tab[0].isEmpty())){
-            out += ++numLigne + "\t";
-
-        }
-      }while (!(tab[0].isEmpty() || tab[1].isEmpty()));
-
-    if(!tab[1].isEmpty())
-      out += tab[1];
-
-    super.write(out,0,out.length());
+    write(str.toCharArray(),off,len);
 
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    String s = String.valueOf(cbuf);
-    write(s,off,len);
+      for(int i = off;i < (off + len);i++)
+      {
+         write(cbuf[i]);
+      }
   }
 
   @Override
   public void write(int c) throws IOException {
+    if (windowsFlag){
 
+      windowsFlag = false;
 
+      if(c == '\n'){
+        super.write('\r');
+        newLinge(c);
+      }
+      else{
+        newLinge('\r');
+        super.write(c);
+      }
 
-
-    if (c == '\r'){
-      windiwsFlag = true;
+    }else if(c == '\n'){
+      newLinge(c);
     }
-    else if (windiwsFlag){
-      windiwsFlag = false;
-      char[] cbuf = {'\r',(char)c};
-      write(cbuf);
+    else if(c == '\r'){
+      windowsFlag = true;
     }
     else{
-      char[] cbuf = {(char)c};
-      write(cbuf);
+      super.write(c);
     }
+  }
+
+
+  private String deco(){
+    return ++numLigne + "\t";
+  }
+  private void newLinge(int c)throws IOException {
+    super.write(c);
+    super.write(deco());
   }
 
 }

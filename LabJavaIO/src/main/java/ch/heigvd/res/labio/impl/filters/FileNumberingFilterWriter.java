@@ -22,15 +22,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
   private int numLigne = 0;
   private Boolean windowsFlag = false;
 
-  public FileNumberingFilterWriter(Writer out) {
-    super(out);
-    try {
-      super.write(deco());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
-  }
+  public FileNumberingFilterWriter(Writer out) { super(out);}
 
   @Override
   public void write(String str, int off, int len) throws IOException {
@@ -49,17 +41,20 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(int c) throws IOException {
+    if(numLigne==0)
+      out.write(deco());
+
     if (windowsFlag){
 
       windowsFlag = false;
 
       if(c == '\n'){
-        super.write('\r');
+        out.write('\r');
         newLinge(c);
       }
       else{
         newLinge('\r');
-        super.write(c);
+        out.write(c);
       }
 
     }else if(c == '\n'){
@@ -69,7 +64,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
       windowsFlag = true;
     }
     else{
-      super.write(c);
+      out.write(c);
     }
   }
 
@@ -78,8 +73,8 @@ public class FileNumberingFilterWriter extends FilterWriter {
     return ++numLigne + "\t";
   }
   private void newLinge(int c)throws IOException {
-    super.write(c);
-    super.write(deco());
+    out.write(c);
+    out.write(deco());
   }
 
 }

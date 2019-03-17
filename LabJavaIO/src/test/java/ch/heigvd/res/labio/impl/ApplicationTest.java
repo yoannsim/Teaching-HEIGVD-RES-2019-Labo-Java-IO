@@ -106,7 +106,6 @@ public class ApplicationTest {
     StringWriter writer = new StringWriter();
     app.printFileNames(writer);
     String output = writer.toString();
-
     StringBuilder sb = new StringBuilder();
 
     sb.append(rootDirectory);
@@ -140,8 +139,6 @@ public class ApplicationTest {
     String outputWithUnixSeparator = m.replaceAll("/");
 
     String reference = sb.toString();
-
-
     boolean applicationReturnsValidPlatformSpecificFilePaths = (reference.equals(output));
     boolean applicationReturnsValidUnixFilePaths = (reference.equals(outputWithUnixSeparator));
     boolean applicationReturnsValidFilePaths = (applicationReturnsValidPlatformSpecificFilePaths || applicationReturnsValidUnixFilePaths);
